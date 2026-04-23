@@ -111,10 +111,10 @@ const enum SearchStatus {
 export const ExcludedReasons: Record<"web" | "discordDesktop" | "vesktop" | "equibop" | "desktop" | "dev", string> = {
     desktop: "Discord Desktop app or Vesktop/Equibop",
     discordDesktop: "Discord Desktop app",
-    vesktop: "Vesktop/Equibop apps",
-    equibop: "Vesktop/Equibop apps",
-    web: "Vesktop/Equibop apps & Discord web",
-    dev: "Developer version of Equicord"
+    vesktop: "Vesktop app",
+    equibop: "Vesktop app",
+    web: "Vesktop app & Discord web",
+    dev: "Developer version of nun"
 };
 
 function ExcludedPluginsList({ search }: { search: string; }) {
@@ -274,7 +274,7 @@ export default function PluginSettings() {
 
             if (isRequired) {
                 const tooltipText = p.required || !depMap[p.name]
-                    ? "This plugin is required for Equicord to function."
+                    ? "This plugin is required for nun to function."
                     : <PluginDependencyList deps={depMap[p.name]?.filter(d => settings.plugins[d].enabled)} />;
 
                 requiredPlugins.push(
@@ -412,14 +412,14 @@ export default function PluginSettings() {
                 <div className={classes(Margins.bottom20, Margins.top8, cl("filter-controls"))}>
                     <Select
                         options={[
-                            { label: "Show All", value: SearchStatus.ALL, default: true },
-                            { label: "Show Enabled", value: SearchStatus.ENABLED },
-                            { label: "Show Disabled", value: SearchStatus.DISABLED },
-                            { label: "Show Equicord", value: SearchStatus.EQUICORD },
-                            { label: "Show Vencord", value: SearchStatus.VENCORD },
-                            { label: "Show New", value: SearchStatus.NEW },
-                            hasUserPlugins && { label: "Show UserPlugins", value: SearchStatus.USER_PLUGINS },
-                            { label: "Show API Plugins", value: SearchStatus.API_PLUGINS },
+                            { label: "All", value: SearchStatus.ALL, default: true },
+                            hasUserPlugins && { label: "nun", value: SearchStatus.USER_PLUGINS },
+                            { label: "Equicord", value: SearchStatus.EQUICORD },
+                            { label: "Vencord", value: SearchStatus.VENCORD },
+                            { label: "Enabled", value: SearchStatus.ENABLED },
+                            { label: "Disabled", value: SearchStatus.DISABLED },
+                            { label: "API", value: SearchStatus.API_PLUGINS },
+                            { label: "New", value: SearchStatus.NEW },
                         ].filter(isTruthy)}
                         serialize={String}
                         select={status => setSearchValue(prev => ({ ...prev, status }))}

@@ -1,17 +1,14 @@
 # Introduction
 
-Equicord is a community project and welcomes any kind of contribution from anyone!
+Vencord is a community project and welcomes any kind of contribution from anyone!
 
-We have development documentation for new contributors, which can be found at <https://docs.equicord.org>.
-
-> [!IMPORTANT]
-> All contributions must follow our [Code of Conduct](./CODE_OF_CONDUCT.md).
+All contributions should be made in accordance with our [Code of Conduct](./CODE_OF_CONDUCT.md).
 
 ## How to contribute
 
 Contributions are submitted through pull requests. If you are new to Git or GitHub, we recommend reading [this guide](https://opensource.com/article/19/7/create-pull-request-github).
 
-Pull requests can target either the `main` or `dev` branch.  
+Pull requests can target either the `main` or `dev` branch.
 Unless you are experienced and know what you are doing, **always target `main`**. The `dev` branch may contain unstable changes and can be force-pushed frequently, which may break your pull request.
 
 ## Writing a Plugin
@@ -32,24 +29,13 @@ Before starting your plugin:
 
 ## Plugin Rules
 
-To keep Equicord stable, secure and maintainable, all plugins must follow these rules:
-1. No simple slash-command plugins (e.g. `/cat`). If applicable, create a [user-installable Discord app](https://discord.com/developers/docs/change-log#userinstallable-apps-preview) instead.
-2. No simple text replacement plugins (the built-in TextReplace plugin already covers this).
-3. No raw DOM manipulation — always use proper patches and React.
-4. No FakeDeafen or FakeMute functionality.
-5. No StereoMic-related plugins.
-6. No plugins that only hide or redesign UI elements (use CSS for that). This rule may be negotiable.
-7. No plugins that interact with specific third-party Discord bots (official Discord apps are allowed).
-8. No selfbots or API abuse (auto-replies, animated statuses, message pruning, Nitro snipers, etc.).
-9. No untrusted third-party APIs (well-known services like Google or GitHub are acceptable).
-10. No plugins that require users to provide their own API keys.
-11. Do not introduce new dependencies unless they are strictly necessary and well justified.
+## Improve nun itself
 
-**Plugins that violate any of these rules will not be accepted.**
+If you have any ideas on how to improve nun itself, or want to propose a new plugin API, feel free to open a feature request so we can discuss.
 
 ## Improving Equicord Itself
 
-If you want to improve Equicord beyond plugins, such as internal features or performance improvements, you are welcome to open a feature request so it can be discussed.
+If you have any ideas on how to improve Equicord itself, or want to propose a new plugin API, feel free to open a feature request so we can discuss.
 
 Bug fixes, refactors, and documentation improvements are also highly appreciated!
 

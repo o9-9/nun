@@ -98,7 +98,7 @@ interface SettingsLayoutBuilder {
 const settings = definePluginSettings({
     settingsLocation: {
         type: OptionType.SELECT,
-        description: "Where to put the Equicord settings section",
+        description: "Where to put the nun settings section",
         options: [
             { label: "At the very top", value: "top" },
             { label: "Above the Nitro section", value: "aboveNitro", default: true },
@@ -187,8 +187,8 @@ export default definePlugin({
         const equicordEntries: SettingsLayoutNode[] = [
             buildEntry({
                 key: "equicord_main",
-                title: "Equicord",
-                panelTitle: "Equicord Settings",
+                title: "nun",
+                panelTitle: "nun Settings",
                 Component: VencordTab,
                 Icon: MainSettingsIcon
             }),
@@ -207,7 +207,7 @@ export default definePlugin({
             !IS_UPDATER_DISABLED && UpdaterTab && buildEntry({
                 key: "equicord_updater",
                 title: "Updater",
-                panelTitle: "Equicord Updater",
+                panelTitle: "nun Updater",
                 Component: UpdaterTab,
                 Icon: UpdaterIcon
             }),
@@ -220,7 +220,7 @@ export default definePlugin({
             buildEntry({
                 key: "equicord_cloud",
                 title: "Cloud",
-                panelTitle: "Equicord Cloud",
+                panelTitle: "nun Cloud",
                 Component: CloudTab,
                 Icon: CloudIcon
             }),
@@ -242,11 +242,11 @@ export default definePlugin({
         const equicordSection: SettingsLayoutNode = {
             key: "equicord_section",
             type: LayoutTypes.SECTION,
-            useTitle: () => "Equicord Settings",
+            useTitle: () => "nun Settings",
             buildLayout: () => equicordEntries
         };
 
-        const { settingsLocation } = settings.store;
+        const settingsLocation = settings.store?.settingsLocation ?? "aboveNitro";
 
         const places: Record<SettingsLocation, string> = {
             top: "user_section",
@@ -273,6 +273,126 @@ export default definePlugin({
 
     customSections: [] as ((SectionTypes: Record<string, string>) => { section: string; element: ComponentType; label: string; id?: string; })[],
     customEntries: [] as EntryOptions[],
+
+    makeSettingsCategories(SectionTypes: Record<string, string>) {
+        return [
+            {
+                section: SectionTypes.HEADER,
+                label: "nun",
+                className: "vc-settings-header",
+            },
+            {
+                section: "EquicordSettings",
+                label: "nun",
+                element: VencordTab,
+                className: "vc-settings",
+            },
+            {
+                section: "EquicordPlugins",
+                label: "Plugins",
+                searchableTitles: ["Plugins"],
+                element: PluginsTab,
+                className: "vc-plugins",
+            },
+            {
+                section: "EquicordThemes",
+                label: "Themes",
+                searchableTitles: ["Themes"],
+                element: ThemesTab,
+                className: "vc-themes",
+            },
+            !IS_UPDATER_DISABLED && {
+                section: "EquicordUpdater",
+                label: "Updater",
+                searchableTitles: ["Updater"],
+                element: UpdaterTab,
+                className: "vc-updater",
+            },
+            {
+                section: "EquicordChangelog",
+                label: "Changelog",
+                searchableTitles: ["Changelog"],
+                element: ChangelogTab,
+                className: "vc-changelog",
+            },
+            {
+                section: "EquicordCloud",
+                label: "Cloud",
+                searchableTitles: ["Cloud"],
+                element: CloudTab,
+                className: "vc-cloud",
+            },
+            {
+                section: "EquicordBackupAndRestore",
+                label: "Backup & Restore",
+                searchableTitles: ["Backup & Restore"],
+                element: BackupAndRestoreTab,
+                className: "vc-backup-restore",
+            },
+            IS_DEV && {
+                section: "EquicordPatchHelper",
+                label: "Patch Helper",
+                searchableTitles: ["Patch Helper"],
+                element: PatchHelperTab,
+                className: "vc-patch-helper",
+            },
+            ...this.customSections.map(func => func(SectionTypes)),
+            {
+                section: SectionTypes.DIVIDER,
+            },
+        ].filter(Boolean);
+    },
+
+    isRightSpot({ header, settings: s }: { header?: string; settings?: string[]; }) {
+        const firstChild = s?.[0];
+        if (firstChild === "LOGOUT" || firstChild === "SOCIAL_LINKS") return true;
+
+        const settingsLocation = settings.store?.settingsLocation ?? "aboveNitro";
+
+        if (settingsLocation === "bottom") return firstChild === "LOGOUT";
+        if (settingsLocation === "belowActivity") return firstChild === "CHANGELOG";
+
+        if (!header) return;
+
+        try {
+            const names: Record<Exclude<SettingsLocation, "bottom" | "belowActivity">, string> = {
+                top: getIntlMessage("USER_SETTINGS"),
+                aboveNitro: getIntlMessage("BILLING_SETTINGS"),
+                belowNitro: getIntlMessage("APP_SETTINGS"),
+                aboveActivity: getIntlMessage("ACTIVITY_SETTINGS"),
+            };
+
+            if (!names[settingsLocation] || names[settingsLocation].endsWith("_SETTINGS"))
+                return firstChild === "PREMIUM";
+
+            return header === names[settingsLocation];
+        } catch {
+            return firstChild === "PREMIUM";
+        }
+    },
+
+    patchedSettings: new WeakSet(),
+
+    addSettings(
+        elements: any[],
+        element: { header?: string; settings: string[]; },
+        SectionTypes: Record<string, string>,
+    ) {
+        if (this.patchedSettings.has(elements) || !this.isRightSpot(element)) return;
+
+        this.patchedSettings.add(elements);
+        elements.push(...this.makeSettingsCategories(SectionTypes));
+    },
+
+    wrapSettingsHook(originalHook: (...args: any[]) => Record<string, unknown>[]) {
+        return (...args: any[]) => {
+            const elements = originalHook(...args);
+            if (!this.patchedSettings.has(elements))
+                elements.unshift(...this.makeSettingsCategories({ HEADER: SectionType.HEADER, DIVIDER: SectionType.DIVIDER, CUSTOM: SectionType.CUSTOM }) as Record<string, unknown>[]);
+
+            return elements;
+        };
+    },
 
     get electronVersion() {
         return VencordNative.native.getVersions().electron ?? window.legcord?.electron ?? null;

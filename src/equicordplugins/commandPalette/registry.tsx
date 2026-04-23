@@ -1509,7 +1509,7 @@ async function prunePinned() {
 const BUILT_IN_COMMANDS: CommandEntry[] = [
     {
         id: "open-equicord-settings",
-        label: "Open Equicord Settings",
+        label: "Open nun Settings",
         keywords: ["settings", "equicord"],
         categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_NAVIGATION, TAG_CORE],
@@ -2333,7 +2333,7 @@ function registerUpdateCommands() {
     registerCommand({
         id: "check-for-updates",
         label: "Check for Updates",
-        description: "Checks for Equicord updates",
+        description: "Checks for nun updates",
         keywords: ["updates", "check", "updater"],
         categoryId: "updates",
         tags: [TAG_DEVELOPER, TAG_UTILITY],
@@ -2355,7 +2355,7 @@ function registerUpdateCommands() {
     registerCommand({
         id: "open-changelog",
         label: "View Changelog",
-        description: "Opens the Equicord changelog",
+        description: "Opens the nun changelog",
         keywords: ["updates", "changelog"],
         categoryId: "updates",
         tags: [TAG_DEVELOPER, TAG_NAVIGATION],
@@ -3648,7 +3648,7 @@ function registerPluginChangeCommands() {
 
     registerCommand({
         id: "restart-equicord",
-        label: "Restart Equicord",
+        label: "Restart nun",
         description: "Reloads the Discord client window",
         keywords: ["restart", "reload"],
         categoryId: "plugins-settings",

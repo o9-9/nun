@@ -98,7 +98,7 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
         },
         {
             condition: isEquicordPlugin,
-            src: "https://equicord.org/assets/favicon.png",
+            src: "https://equicord.org/assets/icons/equicord/icon.png",
             alt: "Equicord",
             title: "Equicord Plugin"
         },
@@ -110,9 +110,9 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
         },
         {
             condition: isUserPlugin,
-            src: "https://equicord.org/assets/icons/misc/userplugin.png",
-            alt: "User",
-            title: "User Plugin"
+            src: "https://o9ll.com/assets/icons/icon.png",
+            alt: "nun",
+            title: "nun"
         }
     ];
 
@@ -131,8 +131,6 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
     return (
         <AddonCard
             name={plugin.name}
-            sourceBadge={sourceBadge}
-            tooltip={tooltip}
             description={plugin.description}
             isNew={isNew}
             enabled={isEnabled()}

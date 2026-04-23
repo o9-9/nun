@@ -37,7 +37,7 @@ interface IReactionAdd {
     channelId: string;
     messageId: string;
     messageAuthorId: string;
-    userId: "195136840355807232";
+    userId: string;
     emoji: ReactionEmoji;
 }
 
@@ -51,8 +51,12 @@ interface IVoiceChannelEffectSendEvent {
 }
 
 const MOYAI = "🗿";
+const DUCK = "🦆";
+const DUCK_VARIANTS = [":duck:", "🦆", ":🦆:", "duck"] as const;
 const MOYAI_URL = "https://github.com/Equicord/Equibored/raw/main/sounds/moyai/moyai.mp3";
 const MOYAI_URL_HD = "https://github.com/Equicord/Equibored/raw/main/sounds/moyai/moyai.wav";
+const MOYAI_URL_ULTRA = "https://pub-e77fd37d275f481896833bda931f1d70.r2.dev/moyai2.wav";
+const MOYAI_URL_ULTRA_HD = "https://pub-e77fd37d275f481896833bda931f1d70.r2.dev/moyai2.wav";
 
 const settings = definePluginSettings({
     volume: {
@@ -75,6 +79,11 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         default: true
     },
+    ultraMode: {
+        description: "nun's special 🗿 feature!!",
+        type: OptionType.BOOLEAN,
+        default: true
+    },
     ignoreBots: {
         description: "Ignore bots",
         type: OptionType.BOOLEAN,
@@ -89,8 +98,8 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Moyai",
-    authors: [Devs.Megu, Devs.Nuckyz],
-    description: "Plays a 🗿 sound effect whenever a moyai emoji is sent, reacted, or used as a voice effect in your current channel.",
+    authors: [Devs.Megu, Devs.Nuckyz, Devs.rayanzay],
+    description: "🗿 but with something else inside the settings...",
     tags: ["Fun"],
     settings,
 
@@ -104,9 +113,10 @@ export default definePlugin({
             if (channelId !== SelectedChannelStore.getChannelId()) return;
 
             const moyaiCount = getMoyaiCount(message.content);
+            const hasDuck = hasDuckEmoji(message.content);
 
             for (let i = 0; i < moyaiCount; i++) {
-                boom();
+                boom(hasDuck);
                 await sleep(300);
             }
         },
@@ -118,17 +128,19 @@ export default definePlugin({
             if (channelId !== SelectedChannelStore.getChannelId()) return;
 
             const name = emoji.name.toLowerCase();
-            if (name !== MOYAI && !name.includes("moyai") && !name.includes("moai")) return;
+            const isDuckEmoji = name.includes("duck") || name === DUCK.toLowerCase();
+            if (name !== MOYAI && !name.includes("moyai") && !name.includes("moai") && !isDuckEmoji) return;
 
-            boom();
+            boom(isDuckEmoji);
         },
 
         VOICE_CHANNEL_EFFECT_SEND({ emoji }: IVoiceChannelEffectSendEvent) {
             if (!emoji?.name) return;
             const name = emoji.name.toLowerCase();
-            if (name !== MOYAI && !name.includes("moyai") && !name.includes("moai")) return;
+            const isDuckEmoji = name.includes("duck") || name === DUCK.toLowerCase();
+            if (name !== MOYAI && !name.includes("moyai") && !name.includes("moai") && !isDuckEmoji) return;
 
-            boom();
+            boom(isDuckEmoji);
         }
     }
 });
@@ -154,6 +166,7 @@ function countMatches(sourceString: string, pattern: RegExp) {
 }
 
 const customMoyaiRe = /<a?:\w*moy?ai\w*:\d{17,20}>/gi;
+const customDuckRe = /<a?:.*?duck.*?:\d{17,20}>/gi;
 
 function getMoyaiCount(message: string) {
     const count = countOccurrences(message, MOYAI)
@@ -162,14 +175,62 @@ function getMoyaiCount(message: string) {
     return Math.min(count, 10);
 }
 
-function boom() {
+function hasDuckEmoji(message: string) {
+    // Reset regex state since it's global
+    customDuckRe.lastIndex = 0;
+
+    // Check for regular duck emoji and :duck: text
+    const hasBasicDuck = DUCK_VARIANTS.some(variant => message.includes(variant));
+
+    // Check for custom server emoji
+    const hasCustomDuck = customDuckRe.test(message);
+
+    return hasBasicDuck || hasCustomDuck;
+}
+
+let ultraQueue: (() => void)[] = [];
+let ultraPlaying = false;
+
+// Expose clearQueue function for SoundStopper plugin
+(window as any).__moyaiPlugin = {
+    clearQueue: () => {
+        ultraQueue = [];
+        ultraPlaying = false;
+    }
+};
+
+async function playUltraBoom(audioElement: HTMLAudioElement) {
+    ultraPlaying = true;
+    await new Promise<void>((resolve) => {
+        audioElement.onended = () => resolve();
+        audioElement.onerror = () => resolve();
+        audioElement.play();
+    });
+    ultraPlaying = false;
+    if (ultraQueue.length > 0) {
+        const next = ultraQueue.shift();
+        if (next) next();
+    }
+}
+
+function boom(isDuck = false) {
     if (!settings.store.triggerWhenUnfocused && !document.hasFocus()) return;
     const audioElement = document.createElement("audio");
 
-    audioElement.src = settings.store.quality === "HD"
-        ? MOYAI_URL_HD
-        : MOYAI_URL;
+    audioElement.src = settings.store.ultraMode
+        ? (settings.store.quality === "HD" ? MOYAI_URL_ULTRA_HD : MOYAI_URL_ULTRA)
+        : (settings.store.quality === "HD" ? MOYAI_URL_HD : MOYAI_URL);
 
     audioElement.volume = settings.store.volume;
-    audioElement.play();
+
+    if (settings.store.ultraMode) {
+        const playFn = () => playUltraBoom(audioElement);
+        if (ultraPlaying) {
+            ultraQueue.push(playFn);
+        } else {
+            playFn();
+        }
+    } else {
+        audioElement.play();
+    }
 }

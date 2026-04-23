@@ -85,7 +85,7 @@ export function EquicordDonorModal() {
                     >
                         <Flex justifyContent="center" alignItems="center" gap="0.5em">
                             <Heart />
-                            Equicord Donor
+                            Vencord Donor
                         </Flex>
                     </HeadingPrimary>
                 </ModalHeader>
@@ -105,12 +105,12 @@ export function EquicordDonorModal() {
                         />
                     </Flex>
                     <div style={{ padding: "1em" }}>
-                        <Paragraph>
-                            This Badge is a special perk for Equicord (Not Vencord) Donors
-                        </Paragraph>
-                        <Paragraph className={Margins.top20}>
-                            Please consider supporting the development of Equicord by becoming a donor. It would mean a lot! :3
-                        </Paragraph>
+                        <Forms.FormText>
+                            This Badge is a special perk for Vencord Donors
+                        </Forms.FormText>
+                        <Forms.FormText className={Margins.top20}>
+                            Please consider supporting the development of Vencord by becoming a donor. It would mean a lot! :3
+                        </Forms.FormText>
                     </div>
                 </ModalContent>
                 <ModalFooter>
@@ -138,7 +138,7 @@ export function EquicordTranslatorModal() {
                         }}
                     >
                         <Flex justifyContent="center" alignItems="center" gap="0.5em">
-                            Equicord Translator
+                            nun Translator
                         </Flex>
                     </HeadingPrimary>
                 </ModalHeader>
@@ -153,7 +153,7 @@ export function EquicordTranslatorModal() {
                     </Flex>
                     <div className="vc-translate-modal-paragraph">
                         <Paragraph>
-                            Awarded to contributors who expand Equicord’s language support by translating content for the community.
+                            Awarded to contributors who expand nun language support by translating content for the community.
                         </Paragraph>
                     </div>
                 </ModalContent>

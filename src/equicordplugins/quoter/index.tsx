@@ -15,8 +15,8 @@ import { Message } from "@vencord/discord-types";
 import { Button, IconUtils, Menu, TextInput, UploadHandler, useEffect, useState } from "@webpack/common";
 
 import { QuoteIcon } from "./components/QuoteIcon";
+import { createQuoteImage, generateFileNamePreview, getFileExtension, getMimeType, ensureFontLoaded, resetFontLoading } from "./utils";
 import { QuoteFont } from "./types";
-import { createQuoteImage, ensureFontLoaded, generateFileNamePreview, getFileExtension, getMimeType, resetFontLoading } from "./utils";
 
 const settings = definePluginSettings({
     quoteFont: {
@@ -33,7 +33,7 @@ const settings = definePluginSettings({
     watermark: {
         type: OptionType.STRING,
         description: "Custom watermark text (max 32 characters)",
-        default: "Made with Equicord"
+        default: "Made with o9"
     },
     grayscale: {
         type: OptionType.BOOLEAN,
@@ -50,7 +50,7 @@ const settings = definePluginSettings({
     saveAsGif: {
         type: OptionType.BOOLEAN,
         description: "Save as GIF by default",
-        default: false,
+        default: true,
         hidden: true
     }
 });

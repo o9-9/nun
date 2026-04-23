@@ -200,7 +200,7 @@ const settings = definePluginSettings({
         restartNeeded: true,
         options: [
             {
-                label: "Equicord",
+                label: "nun",
                 value: "equicord",
                 default: true
             },

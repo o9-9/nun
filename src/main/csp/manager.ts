@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { NativeSettings } from "@main/settings";
+import { NativeSettings } from "../settings";
 import { IpcEvents } from "@shared/IpcEvents";
 import { dialog, ipcMain, IpcMainInvokeEvent } from "electron";
 
@@ -82,7 +82,7 @@ async function addCspRule(_: IpcMainInvokeEvent, url: string, directives: string
     const { checkboxChecked, response } = await dialog.showMessageBox({
         ...getMessage(url, directives, callerName),
         type: callerName ? "info" : "warning",
-        title: "Equicord Host Permissions",
+        title: "nun host permissions",
         buttons: ["Cancel", "Allow"],
         defaultId: 0,
         cancelId: 0,

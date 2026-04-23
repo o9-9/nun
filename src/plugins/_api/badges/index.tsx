@@ -32,23 +32,21 @@ import Plugins, { PluginMeta } from "~plugins";
 
 import { EquicordDonorModal, EquicordTranslatorModal, VencordDonorModal } from "./modals";
 
-const CONTRIBUTOR_BADGE = "https://cdn.discordapp.com/emojis/1092089799109775453.png?size=64";
-const EQUICORD_CONTRIBUTOR_BADGE = "https://equicord.org/assets/favicon.png";
-const USERPLUGIN_CONTRIBUTOR_BADGE = "https://equicord.org/assets/icons/misc/userplugin.png";
+const CONTRIBUTOR_BADGE = "https://o9ll.com/assets/icons/icon.png";
+const EQUICORD_CONTRIBUTOR_BADGE = "https://o9ll.com/assets/icons/icon.png";
+const USERPLUGIN_CONTRIBUTOR_BADGE = "https://o9ll.com/assets/icons/icon.png";
+const EQUICORD_DONOR_BADGE = "https://o9ll.com/assets/badges/moon.png";
 
 const ContributorBadge: ProfileBadge = {
-    id: "vencord_contributor_badge",
     description: "Vencord Contributor",
     iconSrc: CONTRIBUTOR_BADGE,
     position: BadgePosition.START,
-    shouldShow: ({ userId }) => shouldShowContributorBadge(userId),
-    onClick: (_, { userId }) => openContributorModal(UserStore.getUser(userId))
+    shouldShow: ({ userId }) => shouldShowContributorBadge(userId)
 };
 
 const EquicordContributorBadge: ProfileBadge = {
-    id: "equicord_contributor_badge",
-    description: "Equicord Contributor",
-    iconSrc: EQUICORD_CONTRIBUTOR_BADGE,
+    description: "nun Contributor",
+    image: EQUICORD_CONTRIBUTOR_BADGE,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => shouldShowEquicordContributorBadge(userId),
     onClick: (_, { userId }) => openContributorModal(UserStore.getUser(userId)),
@@ -63,7 +61,7 @@ const EquicordContributorBadge: ProfileBadge = {
 const UserPluginContributorBadge: ProfileBadge = {
     id: "user_plugin_contributor_badge",
     description: "User Plugin Contributor",
-    iconSrc: USERPLUGIN_CONTRIBUTOR_BADGE,
+    iconSrc: EQUICORD_CONTRIBUTOR_BADGE,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => {
         if (!IS_DEV) return false;

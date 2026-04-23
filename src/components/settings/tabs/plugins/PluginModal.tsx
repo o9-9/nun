@@ -246,10 +246,6 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                         ) : <div />}
                         {!pluginMeta.userPlugin && (
                             <div className={cl("links")}>
-                                <WebsiteButton
-                                    text="Website"
-                                    href={isEquicordPlugin ? `https://equicord.org/plugins/${plugin.name}` : `https://vencord.dev/plugins/${plugin.name}`}
-                                />
                                 <GithubButton
                                     text="Source Code"
                                     href={`https://github.com/${gitRemote}/tree/main/${pluginMeta.folderName}`}

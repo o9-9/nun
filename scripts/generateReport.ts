@@ -100,7 +100,7 @@ function toCodeBlock(s: string, indentation = 0, isDiscord = false) {
 async function printReport() {
     console.log();
 
-    console.log("# Equicord Report" + (CANARY ? " (Canary)" : ""));
+    console.log("# nun Report" + (CANARY ? " (Canary)" : ""));
 
     console.log();
 
@@ -201,7 +201,7 @@ async function printReport() {
         }
 
         const body = JSON.stringify({
-            username: "Equicord Reporter" + (CANARY ? " (Canary)" : ""),
+            username: "nun Reporter" + (CANARY ? " (Canary)" : ""),
             embeds
         });
 

@@ -19,6 +19,7 @@
 import { ChannelStore, GuildMemberStore } from "@webpack/common";
 
 import { EQUICORD_HELPERS, EquicordDevsById, GUILD_ID, SUPPORT_CHANNEL_ID, VencordDevsById } from "./constants";
+export { copyWithToast } from "./discord";
 
 /**
  * Calls .join(" ") on the arguments

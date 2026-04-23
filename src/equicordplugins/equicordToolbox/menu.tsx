@@ -7,14 +7,16 @@
 import { openNotificationLogModal } from "@api/Notifications/notificationLog";
 import { isPluginEnabled, plugins } from "@api/PluginManager";
 import { Settings, useSettings } from "@api/Settings";
-import { openPluginModal, openSettingsTabModal, PluginsTab, ThemesTab } from "@components/settings";
+import { openPluginModal, PluginsTab, ThemesTab } from "@components/settings";
 import { useAwaiter } from "@utils/react";
 import { wordsFromCamel, wordsToTitle } from "@utils/text";
 import { OptionType, Plugin } from "@utils/types";
 import { Menu, showToast, useMemo, useState } from "@webpack/common";
 import type { ReactNode } from "react";
 
-import { settings } from ".";
+import { settings } from "./index";
+
+const { openSettingsTabModal } = require("@components/settings/tabs/BaseTab") as { openSettingsTabModal: (tab: any) => void; };
 
 function buildPluginMenu() {
     const { showPluginMenu } = settings.use(["showPluginMenu"]);
@@ -247,10 +249,11 @@ function buildCustomPluginEntries() {
     const pluginEntries = [] as { plugin: Plugin, node: ReactNode; }[];
 
     for (const plugin of Object.values(plugins)) {
-        if (plugin.toolboxActions && isPluginEnabled(plugin.name)) {
-            const entries = typeof plugin.toolboxActions === "function"
-                ? plugin.toolboxActions()
-                : Object.entries(plugin.toolboxActions).map(([text, action]) => {
+        const toolboxActions = plugin.toolboxActions;
+        if (toolboxActions && isPluginEnabled(plugin.name)) {
+            const entries = typeof toolboxActions === "function"
+                ? (toolboxActions as () => ReactNode)()
+                : Object.entries(toolboxActions as Record<string, () => void>).map(([text, action]) => {
                     const key = `${plugin.name}-${text}`;
 
                     return (
