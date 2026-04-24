@@ -2,12 +2,10 @@ name: Test
 on:
     push:
         branches:
-            - main
-            - dev
+            - nun
     pull_request:
         branches:
-            - main
-            - dev
+            - nun
 
 jobs:
     Test:
