@@ -193,17 +193,17 @@ const appendCssRuntime = readFile("dist/Equicord.user.css", "utf-8").then(conten
 if (!process.argv.includes("--skip-extension")) {
     await Promise.all([
         appendCssRuntime,
-        buildExtension("chromium-unpacked", ["modifyResponseHeaders.json", "content.js", "manifest.json", "icon.png"]),
-        buildExtension("firefox-unpacked", ["background.js", "content.js", "manifestv2.json", "icon.png"]),
+        buildExtension("nun", ["modifyResponseHeaders.json", "content.js", "manifest.json", "icon.png"]),
+        buildExtension("nunx", ["background.js", "content.js", "manifestv2.json", "icon.png"]),
     ]);
 
-    Zip.zip("dist/browser/chromium-unpacked", (_err, zip) => {
-        zip.compress().save("dist/extension-chrome.zip");
-        console.info("Packed Chromium Extension written to dist/extension-chrome.zip");
+    Zip.zip("dist/browser/nun", (_err, zip) => {
+        zip.compress().save("dist/nun.zip");
+        console.info("Packed Chromium Extension written to dist/nun.zip");
     });
-    Zip.zip("dist/browser/firefox-unpacked", (_err, zip) => {
-        zip.compress().save("dist/extension-firefox.zip");
-        console.info("Packed Firefox Extension written to dist/extension-firefox.zip");
+    Zip.zip("dist/browser/nunx", (_err, zip) => {
+        zip.compress().save("dist/nunx.zip");
+        console.info("Packed Firefox Extension written to dist/nunx.zip");
     });
 } else {
     await appendCssRuntime;
